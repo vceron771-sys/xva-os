@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XV Años | Valentina Rodríguez Jiménez</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Cormorant+Garamond:wght@400;500;600;700&family=Bodoni+Moda:wght@400;500;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            scroll-behavior:smooth;
+        }
+
+        :root{
+            --rojo:#9b1028;
+            --rojo-claro:#f8eff1;
+            --texto:#4a4a4a;
+        }
+
+        body{
+            font-family:'Montserrat',sans-serif;
+            background:#fafafa;
+            color:var(--texto);
+            overflow-x:hidden;
+        }
+
+        section{
+            padding:90px 20px;
+        }
+
+        /* ANIMACIÓN AL BAJAR (SCROLL) */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* PORTADA */
+        .hero{
+            min-height:100vh;
+            background: linear-gradient(rgba(0,0,0,.35), rgba(0,0,0,.35)), url("foto1.jpg");
+            background-size:cover;
+            background-position:center;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            color:white;
+            padding:20px;
+        }
+
+        .subtitulo{
+            letter-spacing:8px;
+            text-transform:uppercase;
+        }
+
+        .hero h1{
+            font-family:'Parisienne',cursive;
+            font-size:110px;
+            margin:15px 0;
+            text-shadow:0 5px 20px rgba(0,0,0,.4);
+        }
+
+        .fecha{
+            font-family:'Bodoni Moda',serif;
+            font-size:28px;
+            font-style:italic;
+        }
+
+        /* BOTONES */
+        .btn{
+            display:inline-block;
+            margin-top:25px;
+            padding:16px 38px;
+            border:none;
+            border-radius:50px;
+            background:var(--rojo);
+            color:white;
+            text-decoration:none;
+            font-weight:600;
+            cursor:pointer;
+            transition:.3s;
+            box-shadow:0 8px 25px rgba(0,0,0,.18);
+        }
+
+        .btn:hover{
+            transform:translateY(-4px);
+        }
+
+        /* REPRODUCTOR DE MÚSICA DENTRO DE LA TARJETA */
+        .reproductor-card {
+            background: var(--rojo-claro);
+            border: 2px solid var(--rojo);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(155, 16, 40, 0.08);
+        }
+
+        .reproductor-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .reproductor-titulo {
+            font-family: 'Bodoni Moda', serif;
+            font-size: 20px;
+            font-style: italic;
+            color: var(--rojo);
+            font-weight: 600;
+        }
+
+        .btn-play {
+            background: var(--rojo);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            box-shadow: 0 4px 12px rgba(155, 16, 40, 0.3);
+        }
+
+        .btn-play:hover {
+            transform: scale(1.08);
+        }
+
+        .barra-progreso-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(155, 16, 40, 0.2);
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .barra-progreso {
+            width: 0%;
+            height: 100%;
+            background: var(--rojo);
+            border-radius: 10px;
+            transition: width 0.1s linear;
+        }
+
+        .tiempos {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--texto);
+            font-weight: 500;
+        }
+
+        /* CONTADOR */
+        .contador{
+            width:90%;
+            max-width:950px;
+            margin:-60px auto 40px;
+            background:white;
+            padding:35px;
+            border-radius:25px;
+            display:grid;
+            grid-template-columns:repeat(4,1fr);
+            gap:20px;
+            box-shadow:0 10px 30px rgba(0,0,0,.10);
+            position: relative;
+            z-index: 10;
+        }
+
+        .caja{
+            text-align:center;
+        }
+
+        .caja span{
+            display:block;
+            font-size:45px;
+            font-weight:bold;
+            color:var(--rojo);
+        }
+
+        /* TARJETAS */
+        .card{
+            max-width:900px;
+            margin:auto;
+            background:white;
+            padding:60px 40px;
+            border-radius:25px;
+            box-shadow:0 10px 25px rgba(0,0,0,.08);
+            text-align: center;
+        }
+
+        h2{
+            font-family:'Cormorant Garamond',serif;
+            font-size:68px;
+            color:var(--rojo);
+            margin-bottom:30px;
+        }
+
+        /* NOMBRES */
+        .nombres p{
+            font-family:'Bodoni Moda',serif;
+            font-size:30px;
+            font-style:italic;
+            margin:10px 0;
+        }
+
+        .nombres span{
+            display:block;
+            font-family:'Parisienne',cursive;
+            font-size:48px;
+            color:var(--rojo);
+            margin:12px 0;
+        }
+
+        /* EVENTOS */
+        .evento{
+            background:var(--rojo-claro);
+            border-left:8px solid var(--rojo);
+            border-radius:20px;
+            padding:35px;
+            text-align:center;
+        }
+
+        .hora{
+            font-family:'Cormorant Garamond',serif;
+            font-size:34px;
+            font-weight:bold;
+            color:var(--rojo);
+        }
+
+        .evento h3{
+            font-family:'Cormorant Garamond',serif;
+            font-size:40px;
+            margin:15px 0;
+        }
+
+        .evento p{
+            font-family:'Bodoni Moda',serif;
+            font-size:24px;
+            font-style:italic;
+            line-height:1.8;
+        }
+
+        /* MENSAJES */
+        .mensaje{
+            font-family:'Bodoni Moda',serif;
+            font-size:25px;
+            line-height:2;
+            font-style:italic;
+            max-width:760px;
+            margin:auto;
+        }
+
+        .sobre{
+            font-size:110px;
+            margin:20px 0;
+        }
+
+        /* GALERÍA */
+        .galeria{
+            background:#fff;
+            padding:100px 20px;
+        }
+
+        .contenedor-galeria{
+            max-width:1100px;
+            margin:auto;
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:25px;
+        }
+
+        .contenedor-galeria img{
+            width:100%;
+            height:500px;
+            object-fit:cover;
+            border-radius:25px;
+            box-shadow:0 10px 30px rgba(0,0,0,.15);
+            transition:.4s;
+        }
+
+        .contenedor-galeria img:hover{
+            transform:scale(1.03);
+        }
+
+        footer{
+            background:#f2f2f2;
+            text-align:center;
+            padding:80px 25px;
+        }
+
+        footer p{
+            font-family:'Bodoni Moda',serif;
+            font-size:24px;
+            line-height:2;
+            font-style:italic;
+        }
+
+        @media(max-width:768px){
+            .hero h1{
+                font-size:70px;
+            }
+
+            h2{
+                font-size:50px;
+            }
+
+            .contador{
+                grid-template-columns:repeat(2,1fr);
+            }
+
+            .contenedor-galeria{
+                grid-template-columns:1fr;
+            }
+
+            .nombres p,
+            .evento p,
+            .mensaje,
+            footer p{
+                font-size:20px;
+            }
+
+            .reproductor-card {
+                padding: 20px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- PORTADA -->
+    <section class="hero">
+        <p class="subtitulo">MIS XV AÑOS</p>
+        <h1>Valentina Rodríguez Jiménez</h1>
+        <p class="fecha">15 de agosto de 2026</p>
+        <a href="#inicio" class="btn">
+            Ver invitación
+        </a>
+    </section>
+
+    <!-- CONTADOR -->
+    <div class="contador fade-in">
+        <div class="caja">
+            <span id="dias">00</span>
+            <p>Días</p>
+        </div>
+
+        <div class="caja">
+            <span id="horas">00</span>
+            <p>Horas</p>
+        </div>
+
+        <div class="caja">
+            <span id="minutos">00</span>
+            <p>Minutos</p>
+        </div>
+
+        <div class="caja">
+            <span id="segundos">00</span>
+            <p>Segundos</p>
+        </div>
+    </div>
+
+    <!-- SECCIÓN MÚSICA (REPRODUCTOR DENTRO DE LA INVITACIÓN) -->
+    <section>
+        <div class="card fade-in">
+            <h2>REPRODUCEME</h2>
+            <p class="mensaje" style="font-size: 20px; margin-bottom: 15px;">
+                HAZ CLIC EN PLAY PARA LLENAR ESTE MOMENTO DE MAGIA  🎵
+            </p>
+
+            <audio id="musica" loop>
+                <source src="musica.mp3" type="audio/mpeg">
+            </audio>
+
+            <div class="reproductor-card">
+                <div class="reproductor-info">
+                    <span class="reproductor-titulo">Música de Mis XV</span>
+                    <button class="btn-play" id="btn-play" onclick="toggleMusica()">▶</button>
+                </div>
+
+                <div class="barra-progreso-container" id="progreso-container" onclick="fijarProgreso(event)">
+                    <div class="barra-progreso" id="barra-progreso"></div>
+                </div>
+
+                <div class="tiempos">
+                    <span id="tiempo-actual">0:00</span>
+                    <span id="tiempo-total">0:00</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAPÁS -->
+    <section id="inicio">
+        <div class="card fade-in">
+            <h2>Con la bendición de mis padres</h2>
+            <div class="nombres">
+                <p>Alejandro Rodríguez López</p>
+                <span>&</span>
+                <p>Illian Jimenéz Mendoza</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PADRINOS -->
+    <section>
+        <div class="card fade-in">
+            <h2>Mis padrinos</h2>
+            <div class="nombres">
+                <p>Crispín Cruz Moreno</p>
+                <span>&</span>
+                <p>Yuliana Daniel López</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERÍA DE FOTOS -->
+    <section class="galeria">
+        <div class="contenedor-galeria">
+            <img src="foto1.jpg" alt="Foto Valentina 1" class="fade-in">
+            <img src="foto2.jpg" alt="Foto Valentina 2" class="fade-in">
+            <img src="foto3.jpg" alt="Foto Valentina 3" class="fade-in">
+            <img src="foto4.jpg" alt="Foto Valentina 4" class="fade-in">
+        </div>
+    </section>
+
+    <!-- CEREMONIA -->
+    <section>
+        <div class="card fade-in">
+            <h2>Ceremonia religiosa</h2>
+            <div class="evento">
+                <div class="hora">02:00 PM</div>
+                <h3>Nueva Parroquia de San Francisco de Asís</h3>
+                <p>Tlahuelilpan, Hidalgo</p>
+                <a class="btn" href="https://maps.app.goo.gl/dxamyzreZg9tBe4t6?g_st=aw" target="_blank">
+                    Ver ubicación 📍
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- RECEPCIÓN -->
+    <section>
+        <div class="card fade-in">
+            <h2>Recepción</h2>
+            <div class="evento">
+                <div class="hora">03:30 PM</div>
+                <h3>Salón y Jardín Mardel</h3>
+                <p>Te esperamos para celebrar juntos este día tan especial.</p>
+                <a class="btn" href="https://maps.app.goo.gl/881egfqkkZKhTr7j7?g_st=aw" target="_blank">
+                    Ver ubicación 📍
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- LLUVIA DE SOBRES -->
+    <section>
+        <div class="card fade-in">
+            <h2>Lluvia de sobres</h2>
+            <div class="sobre">✉️</div>
+            <p class="mensaje">
+                Con inmensa alegría y gratitud, quiero compartir contigo uno de los días más especiales de mi vida.
+                Tu presencia será el regalo más valioso para mí y mi familia.
+                Si además deseas obsequiarme un detalle para ayudarme a cumplir nuevos sueños y metas, hemos elegido la tradicional lluvia de sobres.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONFIRMACIÓN -->
+    <section>
+        <div class="card fade-in">
+            <h2>Confirmación</h2>
+            <p class="mensaje">
+                Tu presencia hará este día aún más especial. Confirma tu asistencia por WhatsApp.
+            </p>
+
+            <a class="btn"
+               href="https://wa.me/527731817883?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%20XV%20años%20de%20Valentina%20Rodríguez%20Jiménez.%20Gracias%20por%20la%20invitación."
+               target="_blank">
+                Confirmar asistencia 💬
+            </a>
+
+            <p style="margin-top:25px; font-family:'Bodoni Moda', serif; font-size:22px;">
+                773 181 7883
+            </p>
+        </div>
+    </section>
+
+    <!-- DESPEDIDA -->
+    <footer>
+        <div class="fade-in">
+            <h2>¡Te esperamos!</h2>
+            <p>
+                Agradecemos de todo corazón tu cariño, tus buenos deseos y el tiempo que compartirás con nosotros en esta celebración tan especial.
+                Esperamos contar con tu compañía para hacer de este día un recuerdo inolvidable.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Lógica de la cuenta regresiva
+        const fechaEvento = new Date("August 15, 2026 14:00:00").getTime();
+
+        setInterval(() => {
+            const ahora = new Date().getTime();
+            const diferencia = fechaEvento - ahora;
+
+            document.getElementById("dias").innerHTML =
+                Math.floor(diferencia / (1000 * 60 * 60 * 24));
+
+            document.getElementById("horas").innerHTML =
+                Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+            document.getElementById("minutos").innerHTML =
+                Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+
+            document.getElementById("segundos").innerHTML =
+                Math.floor((diferencia % (1000 * 60)) / 1000);
+        }, 1000);
+
+        // Lógica del reproductor de música con barra y tiempo
+        const musica = document.getElementById("musica");
+        const btnPlay = document.getElementById("btn-play");
+        const barraProgreso = document.getElementById("barra-progreso");
+        const tiempoActualEl = document.getElementById("tiempo-actual");
+        const tiempoTotalEl = document.getElementById("tiempo-total");
+
+        function toggleMusica(){
+            if(musica.paused){
+                musica.play();
+                btnPlay.innerHTML = "❚❚";
+            }else{
+                musica.pause();
+                btnPlay.innerHTML = "▶";
+            }
+        }
+
+        // Formatear segundos a 0:00
+        function formatearTiempo(segundos) {
+            const min = Math.floor(segundos / 60);
+            const seg = Math.floor(segundos % 60);
+            return `${min}:${seg < 10 ? '0' : ''}${seg}`;
+        }
+
+        // Actualizar barra de progreso y tiempo
+        musica.addEventListener('timeupdate', () => {
+            if (musica.duration) {
+                const porcentaje = (musica.currentTime / musica.duration) * 100;
+                barraProgreso.style.width = `${porcentaje}%`;
+                tiempoActualEl.innerHTML = formatearTiempo(musica.currentTime);
+                tiempoTotalEl.innerHTML = formatearTiempo(musica.duration);
+            }
+        });
+
+        // Hacer clic en la barra para cambiar el minuto de la canción
+        function fijarProgreso(e) {
+            const container = document.getElementById("progreso-container");
+            const anchoTotal = container.clientWidth;
+            const clickX = e.offsetX;
+            const duracion = musica.duration;
+
+            if (duracion) {
+                musica.currentTime = (clickX / anchoTotal) * duracion;
+            }
+        }
+
+        // Cargar la duración al iniciar el audio
+        musica.addEventListener('loadedmetadata', () => {
+            tiempoTotalEl.innerHTML = formatearTiempo(musica.duration);
+        });
+
+        // Lógica para detectar el scroll y animar elementos al aparecer en pantalla
+        document.addEventListener("DOMContentLoaded", () => {
+            const elementosOcultos = document.querySelectorAll('.fade-in');
+
+            const observador = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                root: null,
+                threshold: 0.15
+            });
+
+            elementosOcultos.forEach(el => observador.observe(el));
+        });
+    </script>
+
+</body>
+
+</html>
